@@ -2,8 +2,8 @@
 
 고등학교 1학년 데이터 과학 수업용 실습 웹앱입니다. 학생들은 오렌지3(Orange Data Mining)로 최근 약 10년간의 국내 지진 데이터를 직접 분석하면서 단계별 문제를 풉니다. 이 웹앱은 기존 PDF 학습지를 바꾼 것입니다.
 
-- **학생용 주소:** https://onezerozerocom.github.io/Orange3/
-- **선생님 결과 화면:** https://onezerozerocom.github.io/Orange3/#teacher (비밀번호 필요)
+- **학생용 주소:** https://onezerozerocom.github.io/orange3-earthquake/
+- **선생님 결과 화면:** https://onezerozerocom.github.io/orange3-earthquake/#teacher (비밀번호 필요)
 
 ## 이렇게 진행됩니다
 
