@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>오렌지3 지진 데이터 탐구</title>
+<title>국내 지진 데이터 탐구</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&family=IBM+Plex+Sans+KR:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;600&display=swap">
@@ -255,7 +255,7 @@ tr.click{cursor:pointer} tr.click:hover td{background:var(--sunk)} tr.sel td{bac
 <body>
 <header class="top">
   <div class="top-in">
-    <div class="brand"><h1>오렌지3 지진 데이터 탐구</h1><small>탐색적 데이터 분석 실습</small></div>
+    <div class="brand"><h1>국내 지진 데이터 탐구</h1><small>탐색적 데이터 분석 실습</small></div>
     <div class="who">
       <input id="sid" placeholder="학번" aria-label="학번" autocomplete="off">
       <input id="sname" placeholder="이름" aria-label="이름" autocomplete="off">
@@ -699,7 +699,7 @@ function printHTML(){
   const res=q=>{ const a=S.a[q.id];
     if(graded(q)) return a?.ok?`정답${a.tries>1?` (${a.tries}회)`:""}`:a?.checked?`오답${a.revealed?" · 정답 확인":""}`:"안 함";
     return isDone(q)?"기록":"안 함"; };
-  return `<header class="pr-head"><h1>오렌지3 지진 데이터 탐구 · 실습 결과</h1>
+  return `<header class="pr-head"><h1>국내 지진 데이터 탐구 · 실습 결과</h1>
     <p>학번 ${esc(S.sid)} · 이름 ${esc(S.sname)} · ${today} · 맞힌 문제 ${ok}/${g.length}</p></header>`
     + MISSIONS.map((m,mi)=>`<section class="pr-sec"><h2>${String(mi).padStart(2,"0")} ${esc(m.title)}</h2>
       <table><thead><tr><th class="c-no">번호</th><th>문제</th><th>내 답</th><th class="c-res">결과</th></tr></thead><tbody>
@@ -760,7 +760,7 @@ document.addEventListener("click",e=>{
     msg.innerHTML="";
     $("#print").innerHTML=printHTML();
     const title=document.title;
-    document.title=`오렌지3지진데이터_${sid}_${sname}`.replace(/[\\/:*?"<>|]/g,"");   // PDF 파일 이름
+    document.title=`국내지진데이터_${sid}_${sname}`.replace(/[\\/:*?"<>|]/g,"");   // PDF 파일 이름
     const done=()=>{ document.title=title; window.removeEventListener("afterprint",done); };
     window.addEventListener("afterprint",done);
     window.print();
