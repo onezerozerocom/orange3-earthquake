@@ -126,11 +126,17 @@ nav.missions ol{list-style:none;margin:0;padding:0;display:flex;flex-direction:c
 .ans-row{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
 .num{width:9em;padding:8px 10px;border:1px solid var(--line);border-radius:8px;background:var(--sunk);font-family:var(--mono);font-variant-numeric:tabular-nums}
 .unit{color:var(--muted);font-size:.9rem}
-.opts{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,220px),1fr));gap:6px}
-.opt{display:flex;gap:8px;align-items:flex-start;padding:9px 12px;border:1px solid var(--line);border-radius:8px;cursor:pointer;background:var(--surface)}
+/* 객관식 보기: 시험지 4지선다형처럼 번호 + 한 줄 */
+.opts{display:grid;grid-template-columns:repeat(var(--cols,1),minmax(0,1fr));gap:6px 10px;margin:2px 0}
+@media (max-width:700px){.opts{grid-template-columns:minmax(0,1fr)}}
+.opt{position:relative;display:flex;gap:8px;align-items:baseline;padding:5px 12px;border:1px solid var(--line);border-radius:8px;cursor:pointer;line-height:1.5}
 .opt:hover{background:var(--sunk)}
-.opt input{margin:4px 0 0;accent-color:var(--accent)}
-.opt.sel{border-color:var(--accent);background:var(--accent-soft)}
+.opt input{position:absolute;opacity:0;width:1px;height:1px;margin:0}
+.opt:focus-within{outline:2px solid var(--accent);outline-offset:1px}
+.opt .mk{flex:none;width:1.4em;text-align:center;font-size:1.05em;color:var(--muted)}
+.opt.sel{background:var(--accent-soft)}
+.opt.sel .mk{color:var(--accent);font-weight:700}
+.opt.sel span:last-child{color:var(--ink);font-weight:600}
 .match{display:grid;grid-template-columns:auto minmax(0,1fr);gap:8px 12px;align-items:center}
 .match .lbl{font-weight:600}
 .match .lbl small{display:block;font-weight:400;color:var(--muted);font-size:.82rem}
@@ -370,7 +376,7 @@ const MISSIONS = [
   qs:[
     {type:"mc", q:"규모 히스토그램(Bin width 0.2)에서 막대가 가장 높은 구간은?", options:["2.0 ~ 2.2","2.4 ~ 2.6","3.0 ~ 3.2","5.0 ~ 5.2"], answer:0},
     {type:"mc", q:"히스토그램 전체 모양을 가장 잘 설명한 것은?", options:["규모가 커질수록 빈도가 빠르게 줄어든다","모든 규모의 빈도가 거의 같다","규모가 커질수록 빈도가 늘어난다","가운데(규모 4)가 가장 높은 종 모양이다"], answer:0, ex:"작은 지진이 대부분이고, 규모 5.5 이상은 아주 드뭅니다."},
-    {type:"record", q:"[해 보기] Variable을 '경도'로, Bin width를 1로 바꾸세요. 막대가 가장 높은 경도 구간은 어디인가요?", placeholder:"예: 125 ~ 126", answer:null},
+    {type:"record", q:"[해 보기] Variable을 '경도'로, Bin width를 1로 바꾸세요. 막대가 가장 높은 경도 구간은 어디인가요?", answer:null},
     {type:"mc", q:"Bin width를 아주 작게 하면 히스토그램은 어떻게 변할까요? 직접 슬라이더를 움직여 확인하세요.", options:["막대가 많아지고 가늘어져 들쭉날쭉해진다","막대 개수가 줄어든다","막대 높이가 모두 같아진다","그래프가 사라진다"], answer:0}
   ]},
 
@@ -393,7 +399,7 @@ const MISSIONS = [
     {type:"num", q:"그래프 위 '평균 ± 표준편차' 표시에서 표준편차는?", answer:6.5, tol:0.01, unit:"km", hint:"'12.85 ± ?' 모양으로 쓰여 있어요."},
     {type:"num", q:"사분위 범위(IQR = 제3사분위수 − 제1사분위수)를 계산해 보세요.", answer:9, tol:0.01, unit:"km", ex:"17 − 8 = 9. 가운데 50%의 지진이 진앙 8~17km 사이에 있습니다."},
     {type:"num", q:"[해 보기] Variable을 '규모'로 바꾸세요. 규모의 중앙값은?", answer:2.3, tol:0.001, ex:"열별 통계량에서 본 중앙값과 같습니다."},
-    {type:"record", q:"[해 보기] 규모의 제1사분위수와 제3사분위수를 읽어 적으세요.", placeholder:"예: 제1사분위수 ○.○ / 제3사분위수 ○.○", answer:null}
+    {type:"record", q:"[해 보기] 규모의 제1사분위수와 제3사분위수를 읽어 적으세요.", answer:null}
   ]},
 
 { id:"scatter", phase:"데이터 시각화", nav:"산점도",
@@ -431,7 +437,7 @@ const MISSIONS = [
     {type:"mc", q:"점의 크기가 클수록 무엇을 뜻하나요?", options:["진앙이 깊은 지진","규모가 큰 지진","여러 번 일어난 지진","위도가 높은 지진"], answer:0},
     {type:"mc", q:"전체 지도에서 육지 중 지진이 특히 많이 모여 있는 곳은?", options:["경상도 부근","서울·경기 부근","휴전선 부근","제주도 부근"], answer:0, ex:"서해와 남해 근해, 그리고 경상도 부근에서 많은 지진이 일어났습니다."},
     {type:"mc", q:"Geo Map (1)에서 규모 3 초과 지진만 보면, 색이 가장 노란색에 가까운 점(가장 큰 지진)은 어느 지역에 있나요?", options:["경상북도 남동쪽 (대구 동쪽, 경주 부근)","서울·경기","평양 부근","제주도 부근"], answer:0, hint:"범례에서 노란색이 큰 규모인지 확인하고, 노란빛이 도는 점 근처를 확대해 도시 이름을 읽어 보세요.", ex:"2016년 경주 지진(규모 5.8)입니다. 그 위쪽 포항 해안에서도 2017년 포항 지진(규모 5.4)이 일어났습니다."},
-    {type:"record", q:"[해 보기] 다른 조건으로 행을 골라 지도에 표시해 보세요. 어떤 조건을 썼고, 무엇을 알게 되었나요?", placeholder:"예: 진앙(km) · 이상 (is at least) · 20 → 깊은 지진은 주로 ○○ 부근에서 일어났다.", long:true, answer:null}
+    {type:"record", q:"[해 보기] 다른 조건으로 행을 골라 지도에 표시해 보세요. 어떤 조건을 썼고, 무엇을 알게 되었나요?", long:true, answer:null}
   ]},
 
 { id:"share", phase:"공유 및 평가", nav:"정리 · 제출",
@@ -443,9 +449,9 @@ const MISSIONS = [
     {t:"<span class=\"kbd\">File</span> → <span class=\"kbd\">Save</span>로 작업을 저장한다. (예: EQK.ows)"}
   ],
   qs:[
-    {type:"text", q:"분석 결과로 알게 된 우리나라 지진의 특징을 세 가지 쓰세요.", placeholder:"1.\n2.\n3."},
-    {type:"text", q:"분석 목적에 맞는 데이터를 적절하게 수집하고 분석했나요? 아쉬운 점이나 더 필요한 데이터가 있다면 쓰세요.", placeholder:"예: 지진이 일어난 지역의 인구나 건물 정보가 있으면 피해 위험도 함께 분석할 수 있다."},
-    {type:"text", q:"분석 결과를 바탕으로, 우리나라 지진에 대비할 수 있는 아이디어를 제안해 보세요.", placeholder:"예: 경주·포항 지역 학교는 …"}
+    {type:"text", q:"분석 결과로 알게 된 우리나라 지진의 특징을 세 가지 쓰세요."},
+    {type:"text", q:"분석 목적에 맞는 데이터를 적절하게 수집하고 분석했나요? 아쉬운 점이나 더 필요한 데이터가 있다면 쓰세요."},
+    {type:"text", q:"분석 결과를 바탕으로, 우리나라 지진에 대비할 수 있는 아이디어를 제안해 보세요."}
   ]}
 ];
 
@@ -536,9 +542,11 @@ function qHTML(q){
     body+=`<div class="ans-row"><input class="num" id="in-${q.id}" inputmode="decimal" value="${esc(a.v)}" aria-label="답"> ${q.unit?`<span class="unit">${q.unit}</span>`:""}</div>`;
   } else if(q.type==="mc" || q.type==="multi"){
     const multi=q.type==="multi"; const sel = multi ? (a.v||[]) : a.v;
-    body+=`<div class="opts" role="${multi?"group":"radiogroup"}">`+q.options.map((o,i)=>{
+    const MK="①②③④⑤⑥⑦⑧⑨⑩";
+    const short=q.options.every(o=>String(o).replace(/<[^>]+>/g,"").length<=14);   // 보기가 짧으면 두 칸, 길면 한 줄에 하나씩
+    body+=`<div class="opts" style="--cols:${short?2:1}" role="${multi?"group":"radiogroup"}">`+q.options.map((o,i)=>{
       const on = multi ? sel.includes(i) : sel===i;
-      return `<label class="opt ${on?"sel":""}"><input type="${multi?"checkbox":"radio"}" name="in-${q.id}" id="in-${q.id}-${i}" value="${i}" ${on?"checked":""}><span>${o}</span></label>`;
+      return `<label class="opt ${on?"sel":""}"><input type="${multi?"checkbox":"radio"}" name="in-${q.id}" id="in-${q.id}-${i}" value="${i}" ${on?"checked":""}><span class="mk" aria-hidden="true">${MK[i]||i+1}</span><span>${o}</span></label>`;
     }).join("")+`</div>`;
   } else if(q.type==="match"){
     const v=a.v||{};
